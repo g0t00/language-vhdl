@@ -1,7 +1,7 @@
 '.source.vhdl':
   'asynchronous process':
     'prefix': 'apro'
-    'body': '${1:identifier} : process(${2:clock}, ${3:reset})\nbegin\n\tif ${3:reset} = \'1\' then\n\t\t$0\n\telsif rising_edge(${2:clock}) then\n\t\t\n\tend if;\nend process; -- end $1'
+    'body': '${1:identifier} : process(${2:i_clk}, ${3:i_reset})\nbegin\n\tif ${3:i_reset} = \'1\' then\n\t\t$0\n\telsif rising_edge(${2:clock}) then\n\t\t\n\tend if;\nend process; -- end $1'
   'architecture':
     'prefix': 'arch'
     'body': 'architecture ${1:arch} of $1 is\n\n$2\n\nbegin\n\n$3\n\nend architecture; -- end $1'
@@ -56,6 +56,9 @@
   'others':
     'prefix': 'oth'
     'body': '(others => \'${0:0}\');'
+  'others0':
+    'prefix': 'oth0'
+    'body': '(others => \'0\');'
   'output std_logic':
     'prefix': 'osl'
     'body': '$1 : out std_logic;$0'
@@ -70,7 +73,10 @@
     'body': 'port map($1);'
   'process':
     'prefix': 'proc'
-    'body': '${1:identifier} : process(${2:sensitivity_list})\nbegin\n\t$0\nend process; -- end $1'
+    'body': '${1:identifier} : process(i_clk, i_reset)\nbegin\n\t$0\nend process; -- end $1'
+  'signal int':
+    'prefix': 'sigint'
+    'body': 'signal $1 : integer range $2 to $3;'
   'signal std_logic':
     'prefix': 'sigsl'
     'body': 'signal $1 : std_logic;$0'
@@ -106,7 +112,53 @@
     'body': 'library ieee;\nuse ieee.std_logic_1164.all;\nuse ieee.numeric_std.all;\nuse work.all;\n\nentity ${1:tb_ent} is\nend entity;\n\narchitecture ${2:test_ent} of $1 is\n\n$3\n\nbegin\n\n$4\n\nend architecture;'
   'vhdl template':
     'prefix': 'vhdl'
-    'body': 'library ieee;\nuse ieee.std_logic_1164.all;\nuse ieee.numeric_std.all;\nuse work.all;\n\nentity $1 is\n  port(\n\t${0:clock}\n  );\nend entity;\n\narchitecture ${2:arch} of $1 is\n\n$3\n\nbegin\n\n$4\n\nend architecture;'
+    'body': '''--------------------------------------------------------------------------------------------------
+-- #######   #####    #####
+-- #        #     #  #     #
+-- #        #        #
+-- #####     #####   #  ####
+-- #              #  #     #
+-- #        #     #  #     #
+-- #######   #####    #####
+--
+-- Fraunhofer HHI - Embedded Systems Group
+--Copyright:
+-- 2017 Fraunhofer Institute for Telecommunications, Heinrich-Hertz-Institut (HHI)
+-- The copyright of this software source code is the property of HHI.
+-- This software may be used and/or copied only with the written permission
+-- of HHI and in accordance with the terms and conditions stipulated
+-- in the agreement/contract under which the software has been supplied.
+-- The software distributed under this license is distributed on an "AS IS" basis,
+-- WITHOUT WARRANTY OF ANY KIND, either expressed or implied.
+--! @file   $1.vhd
+--! @author Schulte, Anton,   < anton.schulte 'at' hhi.fraunhofer.de>
+--! @brief  $1
+--! @details
+--! @date   2017-11-03
+-- Date         Version Author          Description
+---------------------------------------------------------------------------------------------------
+-- 2017-11-03   1.0     Schulte         initial design
+---------------------------------------------------------------------------------------------------
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+
+library esgiplib;
+use esgiplib.pkg_Datatype.all;
+
+entity $1 is
+  port(
+    i_clk           : in std_logic;
+    i_reset         : in std_logic
+    );
+end entity;
+
+architecture rtl of $1 is
+
+begin
+'''
   'when':
     'prefix': 'when'
     'body': 'when ${1:expression} =>\n\t$0'
